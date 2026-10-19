@@ -361,7 +361,9 @@ O programa recebe o numerador e o denominador de uma fração e tenta simplific�
 
 Por exemplo:
 
-A simplificação resulta em $ \frac{4}{10} = \frac{2}{5} $.
+A simplificação resulta em ```math
+\(\frac{4}{10} = \frac{2}{5} \%\%\)MAGIT_PARSER_PROTECT%%```
+.
 
 As duas frações representam a mesma quantidade, mas a segunda utiliza números menores.
 
