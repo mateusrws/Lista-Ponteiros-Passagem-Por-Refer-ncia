@@ -33,18 +33,20 @@ Organização do repositório
 
 Os dez exercícios oficiais estão distribuídos em pastas independentes. Existe uma particularidade: os exercícios 4 e 5 estão em pastas com a numeração invertida em relação à lista oficial.
 
+
 | Exercício oficial | Objetivo | Arquivo |
-|----------------------------|----------------------|
-|          1         | Ordenar quatro valores | `exercicio1/main.c` |
-|          2         | Trocar dois valores | `exercicio2/main.c` |
-|          3         | Simplificar uma fração | `exercicio3/main.c` |
-|          4         | Calcular a soma e o produto dos números de 1 a 100 | `exercicio5/main.c` |
-|          5         | Preencher um vetor | `exercicio4/main.c` |
-|          6         | Exibir um vetor | `exercicio6/main.c` |
-|          7         | Exibir um vetor ao contrário | `exercicio7/main.c` |
-|          8         | Somar os valores de um vetor | `exercicio8/main.c` |
-|          9         | Contar os valores acima da média | `exercicio9/main.c` |
-|         10         | Somar dois vetores | `exercicio10/main.c` |
+| :---: | :--- | :--- |
+| 1 | Ordenar quatro valores | `exercicio1/main.c` |
+| 2 | Trocar dois valores | `exercicio2/main.c` |
+| 3 | Simplificar uma fração | `exercicio3/main.c` |
+| 4 | Calcular a soma e o produto dos números de 1 a 100 | `exercicio5/main.c` |
+| 5 | Preencher um vetor | `exercicio4/main.c` |
+| 6 | Exibir um vetor | `exercicio6/main.c` |
+| 7 | Exibir um vetor ao contrário | `exercicio7/main.c` |
+| 8 | Somar os valores de um vetor | `exercicio8/main.c` |
+| 9 | Contar os valores acima da média | `exercicio9/main.c` |
+| 10 | Somar dois vetores | `exercicio10/main.c` |
+
 
 Além dessas pastas, execVetor contém pequenos programas de prática, e CLTP contém um exercício adicional sobre números primos.
 
