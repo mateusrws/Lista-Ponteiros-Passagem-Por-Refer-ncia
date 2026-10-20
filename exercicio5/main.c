@@ -1,28 +1,26 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-void vetVal(int *v, int N);
+void somaproduto(int *soma, long double *produto);
 
-int main()
+int main(void)
 {
-    int c, vet[5];
+    int soma;
+    long double produto;
 
-    vetVal(vet, 5);
+    somaproduto(&soma, &produto);
 
-    printf("[");
-    for(c=0;c<5;c++){
-        printf(" %d ", vet[c]);
-    }
-    printf("]\n");
-
+    printf("Soma: %d", soma);
+    printf("\n\nProduto: %.5Le\n\n", produto);
     return 0;
 }
 
-void vetVal(int *v, int N){
+void somaproduto(int *soma, long double *produto)
+{
     int c;
+    long double p = 1.0L;
 
-    for(c=0;c<N;c++){
-        printf("Digite o %d valor: ", c+1);
-        scanf("%d", &v[c]);
-    }
+    *soma = 101 * 100 / 2;
+    for (c = 100; c > 0; c--)
+        p *= c;
+    *produto = p;
 }

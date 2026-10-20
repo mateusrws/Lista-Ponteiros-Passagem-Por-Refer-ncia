@@ -1,41 +1,62 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-void simplifica(int *divisor, int *dividendo);
+int simplifica(int *numerador, int *denominador);
 
-int main()
+int main(void)
 {
-    int divisor, dividendo;
+    int numerador, denominador;
 
-    printf("Digite o valor do divisor: ");
-    scanf("%d", &divisor);
+    printf("Digite o numerador: ");
+    if (scanf("%d", &numerador) != 1) {
+        fprintf(stderr, "Entrada invalida.\n");
+        return 1;
+    }
 
-    printf("Digite o valor do dividendo: ");
-    scanf("%d", &dividendo);
+    printf("Digite o denominador (diferente de zero): ");
+    if (scanf("%d", &denominador) != 1 || denominador == 0) {
+        fprintf(stderr, "Denominador invalido.\n");
+        return 1;
+    }
 
     printf("\n\n\t=====ANTES=====\n");
-    printf("Divisor | Endereco: %d\tValor: %d\nDividendo | Endereco: %d\tValor: %d\n", &divisor, divisor, &dividendo, dividendo);
-    simplifica(&divisor, &dividendo);
+    printf("Numerador: %d\tDenominador: %d\n", numerador, denominador);
+    if (!simplifica(&numerador, &denominador)) {
+        fprintf(stderr, "Nao foi possivel simplificar a fracao.\n");
+        return 1;
+    }
 
     printf("\n\t=====DEPOIS=====\n");
-    printf("Divisor | Endereco: %d\tValor: %d\nDividendo | Endereco: %d\tValor: %d\n\n", &divisor, divisor, &dividendo, dividendo);
+    printf("Numerador: %d\tDenominador: %d\n\n", numerador, denominador);
 
     return 0;
 }
 
-void simplifica(int *divisor, int *dividendo){
-    int c, menor;
+int simplifica(int *numerador, int *denominador)
+{
+    long long a, b, resto;
+    long long divisorComum;
 
-    if(*divisor<*dividendo){
-        menor = *divisor;
-    }else{
-        menor = *dividendo;
-    }
+    if (numerador == NULL || denominador == NULL || *denominador == 0)
+        return 0;
 
-    for(c=1;c<=menor;c++){
-        if((*divisor%c==0) && (*dividendo%c == 0)){
-            *divisor = *divisor/c;
-            *dividendo = *dividendo/c;
-        }
+    a = *numerador;
+    b = *denominador;
+    if (a < 0)
+        a = -a;
+    if (b < 0)
+        b = -b;
+
+    while (b != 0) {
+        resto = a % b;
+        a = b;
+        b = resto;
     }
+    divisorComum = a;
+
+    if (divisorComum == 0)
+        return 0;
+
+    *numerador /= divisorComum;
+    *denominador /= divisorComum;
+    return 1;
 }

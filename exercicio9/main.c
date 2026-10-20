@@ -1,38 +1,50 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void mediaQtd(int *v, int N);
+int mediaQtd(int *v, int N, double *media);
 
-int main()
+int main(void)
 {
-
     int c, v[5];
+    int quantidade;
+    double media;
 
-    for(c=0;c<5;c++){
-        printf("Digite o %d valor: ", c+1);
-        scanf("%d", &v[c]);
+    for (c = 0; c < 5; c++) {
+        printf("Digite o %d valor: ", c + 1);
+        if (scanf("%d", &v[c]) != 1) {
+            fprintf(stderr, "Entrada invalida.\n");
+            return 1;
+        }
     }
 
-    mediaQtd(v,5);
+    quantidade = mediaQtd(v, 5, &media);
+    if (quantidade < 0) {
+        fprintf(stderr, "Vetor ou tamanho invalido.\n");
+        return 1;
+    }
+
+    printf("Media: %.2f\n", media);
+    printf("%d valores sao maiores que a media.\n", quantidade);
 
     return 0;
 }
 
-void mediaQtd(int *v, int N){
-    int c, media=0, soma=0,qtd=0;
+int mediaQtd(int *v, int N, double *media)
+{
+    int c, quantidade = 0;
+    long long soma = 0;
 
-    for(c=0;c<N;c++){
+    if (v == NULL || media == NULL || N <= 0)
+        return -1;
+
+    for (c = 0; c < N; c++)
         soma += v[c];
-    }
 
-    media = soma/N;
+    *media = (double)soma / N;
 
-    for(c=0;c<N;c++){
-        if(v[c] > media){
-            qtd++;
-        }
-    }
+    for (c = 0; c < N; c++)
+        if (v[c] > *media)
+            quantidade++;
 
-    printf("Média: %d\n", media);
-    printf("%d valores sao maiores que a media de todos", qtd);
+    return quantidade;
 }

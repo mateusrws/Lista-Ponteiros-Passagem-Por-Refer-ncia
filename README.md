@@ -38,13 +38,13 @@ Leia cada exercício nesta ordem:
 | :---: | :--- | :--- |
 | 1 | **Objetivo** | Entenda o problema que o programa precisa resolver. |
 | 2 | **Conceitos necessários** | Conheça as ferramentas da linguagem utilizadas. |
-| 3 | **Código original** | Observe a implementação presente no repositório. |
+| 3 | **Código atualizado** | Observe a implementação corrigida presente no repositório. |
 | 4 | **Explicação linha a linha** | Entenda o papel de cada instrução. |
 | 5 | **Analogia cotidiana** | Relacione o código a uma situação familiar. |
-| 6 | **Atenção** | Identifique erros ou limitações que serão corrigidos futuramente, quando existirem. |
+| 6 | **Atenção** | Confira as validações e os limites que continuam dependendo de quem chama a função. |
 
 > [!IMPORTANT]
-> Os códigos apresentados neste README são os **trechos originais** documentados no projeto. Alguns possuem problemas de implementação. Eles serão mantidos como estão nesta documentação, e as consequências desses problemas serão explicadas nas seções **Atenção**.
+> Os trechos de código deste README acompanham as correções aplicadas aos arquivos-fonte. As seções **Atenção** destacam os cuidados que ainda cabem a quem utiliza as funções, como informar corretamente o tamanho real de um vetor.
 
 ---
 
@@ -52,16 +52,13 @@ Leia cada exercício nesta ordem:
 
 Os dez exercícios oficiais estão distribuídos em pastas independentes.
 
-> [!NOTE]
-> Existe uma particularidade: os **exercícios 4 e 5** estão em pastas com a numeração **invertida** em relação à lista oficial.
-
 | Exercício oficial | Objetivo | Arquivo |
 | :---: | :--- | :--- |
 | [1](#exercício-1--ordenar-quatro-valores) | Ordenar quatro valores | `exercicio1/main.c` |
 | [2](#exercício-2--trocar-dois-valores-swap) | Trocar dois valores | `exercicio2/main.c` |
 | [3](#exercício-3--simplificar-uma-fração) | Simplificar uma fração | `exercicio3/main.c` |
-| [4](#exercício-4--soma-e-produto-dos-100-primeiros-positivos) | Calcular a soma e o produto dos números de 1 a 100 | `exercicio5/main.c` ⚠️ |
-| [5](#exercício-5--preencher-um-vetor) | Preencher um vetor | `exercicio4/main.c` ⚠️ |
+| [4](#exercício-4--soma-e-produto-dos-100-primeiros-positivos) | Calcular a soma e o produto dos números de 1 a 100 | `exercicio5/main.c` |
+| [5](#exercício-5--preencher-um-vetor) | Preencher um vetor | `exercicio4/main.c` |
 | [6](#exercício-6--exibir-um-vetor) | Exibir um vetor | `exercicio6/main.c` |
 | [7](#exercício-7--exibir-um-vetor-ao-contrário) | Exibir um vetor ao contrário | `exercicio7/main.c` |
 | [8](#exercício-8--somar-os-valores-de-um-vetor) | Somar os valores de um vetor | `exercicio8/main.c` |
@@ -93,119 +90,70 @@ Uma maneira de fazer isso é comparar pessoas vizinhas e trocar suas posições 
 - **Condicional `if`:** executa um bloco somente quando uma condição é verdadeira.
 - **Variável temporária:** espaço utilizado para guardar provisoriamente um valor durante uma troca.
 
-### 3. Código original
+### 3. Código atualizado
 
 ```c
-int ordenar(int *v, int N) {
-    int c, temp, i, swaped;
+void ordenar(int *v, int N) {
+    int i, j, temp, swapped;
 
-    for (c = 0; c < N; c++) {
-        swaped = 0;
-        for (i = 0; i < N - c - 1; i++) {
-            if (v[i] > v[i + 1]) {
-                temp = v[i];
-                v[i] = v[i + 1];
-                v[i + 1] = temp;
-                swaped = 1;
+    for (i = 0; i < N - 1; i++) {
+        swapped = 0;
+        for (j = 0; j < N - i - 1; j++) {
+            if (v[j] > v[j + 1]) {
+                temp = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = temp;
+                swapped = 1;
             }
         }
-        if (swaped == 0) {
-            printf("[");
-            for (c = 0; c < N; c++)
-                printf(" %d ", v[c]);
-            printf("]");
-        }
+        if (!swapped)
+            break;
     }
 }
 ```
 
 ### 4. Explicação linha a linha
 
-**Linha 1 — `int ordenar(int *v, int N)`**
+**Linha 1 — `void ordenar(int *v, int N)`**
 
 Declara uma função chamada `ordenar`.
 
-- `int` é o tipo de retorno declarado para a função.
+- `void` indica que a função não retorna um valor.
 - `ordenar` é o nome da função.
 - `int *v` recebe o endereço de um vetor de inteiros.
 - `int N` recebe a quantidade de elementos que devem ser considerados.
 
 O asterisco em `int *v` indica que `v` é um **ponteiro para inteiros**. Isso permite que a função trabalhe diretamente com os elementos do vetor recebido.
 
-**Linha 2 — `int c, temp, i, swaped;`**
+**Linha 2 — `int i, j, temp, swapped;`**
 
-Declara quatro variáveis inteiras:
+Declara os contadores dos laços, a variável temporária usada na troca e a marcação que indica se houve alguma troca.
 
-- `c`: controla o laço externo.
-- `temp`: guarda temporariamente um valor durante a troca.
-- `i`: percorre as posições do vetor no laço interno.
-- `swaped`: indica se ocorreu alguma troca durante uma passagem pelo vetor.
+**Linha 4 — `for (i = 0; i < N - 1; i++)`**
 
-> O nome `swaped` foi mantido como aparece no código original.
+Controla as passagens pelo vetor. A cada passagem, o maior valor ainda não colocado em sua posição final avança para o fim.
 
-**Linha 4 — `for (c = 0; c < N; c++)`**
+**Linha 5 — `swapped = 0;`**
 
-Inicia o laço externo. A estrutura `for` possui três partes:
+Começa cada passagem supondo que os elementos já estejam ordenados. Se alguma troca ocorrer, o programa altera essa marcação.
 
-1. `c = 0`: inicializa o contador.
-2. `c < N`: verifica se o contador ainda está dentro do limite.
-3. `c++`: incrementa o contador ao final de cada repetição.
+**Linha 6 — `for (j = 0; j < N - i - 1; j++)`**
 
-O símbolo `++` aumenta o valor da variável em uma unidade.
+Percorre os pares vizinhos. O limite diminui porque os maiores valores já foram colocados no final.
 
-Como `N` representa o tamanho do vetor, o laço realiza passagens sucessivas para organizar os elementos.
+**Linha 7 — `if (v[j] > v[j + 1])`**
 
-**Linha 5 — `swaped = 0;`**
+Compara dois elementos vizinhos. Se o da esquerda for maior, eles estão fora da ordem crescente.
 
-Marca o início de uma nova passagem pelo vetor.
+**Linhas 8 a 11 — troca dos elementos**
 
-O programa começa considerando que nenhuma troca aconteceu. Se encontrar dois valores fora de ordem, altera essa variável para `1`.
+`temp` guarda `v[j]` antes de substituí-lo por `v[j + 1]`; em seguida, o valor temporário vai para a posição seguinte. `swapped = 1` registra que a passagem precisou corrigir a ordem.
 
-**Linha 6 — `for (i = 0; i < N - c - 1; i++)`**
+**Linhas 14 e 15 — encerramento antecipado**
 
-Inicia o laço interno, responsável por comparar os elementos vizinhos.
+Se nenhuma troca foi feita, `!swapped` é verdadeiro e `break` encerra o laço: o vetor já está ordenado.
 
-Como no laço anterior, `i` começa em zero e aumenta uma unidade a cada repetição.
-
-A expressão `N - c - 1` reduz o limite das comparações conforme as passagens acontecem. Isso ocorre porque, no algoritmo conhecido como **Bubble Sort**, os maiores valores vão sendo deslocados para o final do vetor.
-
-O `- 1` é necessário porque o programa acessa também a posição seguinte, `i + 1`.
-
-**Linha 7 — `if (v[i] > v[i + 1])`**
-
-Compara o elemento atual com o próximo.
-
-- `v[i]` representa o elemento da posição atual.
-- `v[i + 1]` representa o elemento seguinte.
-- `>` significa "maior que".
-
-Se o elemento atual for maior que o próximo, os dois estão fora de ordem crescente e precisam ser trocados.
-
-**Linha 8 — `temp = v[i];`**
-
-Guarda o valor atual em `temp`. Essa etapa é necessária para que o valor não seja perdido durante a troca.
-
-**Linha 9 — `v[i] = v[i + 1];`**
-
-Copia o valor do próximo elemento para a posição atual. O valor anterior dessa posição continua guardado em `temp`.
-
-**Linha 10 — `v[i + 1] = temp;`**
-
-Coloca o valor guardado em `temp` na posição seguinte. Assim, a troca é concluída.
-
-**Linha 11 — `swaped = 1;`**
-
-Registra que pelo menos uma troca aconteceu nessa passagem.
-
-**Linhas 15 a 19 — impressão do vetor**
-
-Quando `swaped == 0`, o programa entende que não houve trocas durante a passagem e tenta exibir o vetor:
-
-- `printf("[");` imprime o colchete de abertura.
-- O `for` percorre as posições e imprime cada inteiro com `%d`.
-- `printf("]");` imprime o colchete de fechamento.
-
-A formatação `%d` é utilizada para exibir valores do tipo `int`.
+Depois que `ordenar` termina, `main` percorre o vetor e o imprime uma vez. Assim, exibição e ordenação ficam em etapas separadas.
 
 ### 5. Entendendo os laços na prática
 
@@ -246,11 +194,8 @@ O algoritmo faz exatamente isso, mas compara números em vez de pessoas.
 
 ### 7. Atenção
 
-> [!WARNING]
-> - **Tipo de retorno inadequado:** a função foi declarada como `int`, mas não retorna um valor. Como sua finalidade é reorganizar o vetor, o tipo `void` seria mais apropriado. A ausência de um retorno válido pode causar comportamento indefinido caso o valor de retorno seja utilizado.
-> - **Uso da variável `c` em dois laços:** o `for` de impressão reutiliza `c`, que também controla o laço externo. Isso modifica o contador externo e pode fazer com que a ordenação seja interrompida antes de terminar. O programa será corrigido para usar um contador independente na impressão.
-> - **Impressão durante a ordenação:** a impressão acontece quando não ocorre troca, mas está dentro do laço externo. Isso pode gerar saídas repetidas ou interromper o processamento de forma inesperada. A exibição final deverá acontecer depois da ordenação.
-> - **Nome da variável:** `swaped` será renomeada futuramente para `swapped`, tornando o código mais claro, sem alterar seu funcionamento.
+> [!TIP]
+> A função agora retorna `void`, usa contadores independentes e encerra a ordenação quando uma passagem não realiza trocas. A impressão acontece uma única vez no programa principal, depois da ordenação. O tamanho `N` ainda deve corresponder à quantidade real de elementos do vetor.
 
 ---
 
@@ -284,10 +229,10 @@ Considere uma variável chamada `a` que armazena o número `10`.
 
 Pense em uma casa: o número escrito na placa corresponde ao endereço, enquanto os objetos dentro da casa correspondem ao conteúdo armazenado.
 
-### 3. Código original
+### 3. Código atualizado
 
 ```c
-int swap(int *a, int *b) {
+void swap(int *a, int *b) {
     int tmp;
     tmp = *a;
     *a = *b;
@@ -297,7 +242,7 @@ int swap(int *a, int *b) {
 
 ### 4. Explicação linha a linha
 
-**Linha 1 — `int swap(int *a, int *b)`**
+**Linha 1 — `void swap(int *a, int *b)`**
 
 Declara a função `swap`, que recebe dois ponteiros para inteiros. Os parâmetros `a` e `b` permitem que a função acesse as variáveis originais por meio de seus endereços.
 
@@ -342,12 +287,8 @@ No final, os valores foram trocados.
 
 ### 6. Atenção
 
-> [!WARNING]
-> - **Tipo de retorno inadequado:** a função está declarada como `int`, mas não retorna um inteiro. Como a finalidade é modificar as variáveis originais, `void` seria mais adequado. Utilizar um retorno inexistente pode causar comportamento indefinido.
-> - **Impressão de endereços:** o programa principal utiliza `%d` para imprimir endereços de memória. Esse especificador é destinado a inteiros, não a ponteiros. A consequência pode ser uma saída incorreta e comportamento indefinido. A correção utilizará `%p`, com o endereço convertido para `(void *)`.
-> - **Passagem de endereços:** a função depende de receber endereços válidos. Se receber ponteiros inválidos ou nulos e tentar acessá-los, o programa poderá falhar.
->
-> O código original será mantido nesta documentação; essas correções serão feitas posteriormente no programa.
+> [!TIP]
+> A função agora tem retorno `void`, e o programa imprime endereços com `%p` e argumentos convertidos para `(void *)`. Como em qualquer função que recebe ponteiros, quem a chama deve passar endereços válidos de variáveis inteiras; o programa principal já faz isso passando `&a` e `&b`.
 
 ---
 
@@ -382,68 +323,57 @@ O operador `%` calcula o **resto** de uma divisão inteira. Por exemplo:
 
 Quando o resto é zero, o número é divisível pelo divisor testado.
 
-### 3. Código original
+### 3. Código atualizado
 
 ```c
-void simplifica(int *divisor, int *dividendo) {
-    int c, menor;
-    if (*divisor < *dividendo)
-        menor = *divisor;
-    else
-        menor = *dividendo;
+int simplifica(int *numerador, int *denominador) {
+    long long a, b, resto;
 
-    for (c = 1; c <= menor; c++) {
-        if (*divisor % c == 0 && *dividendo % c == 0) {
-            *divisor = *divisor / c;
-            *dividendo = *dividendo / c;
-        }
+    if (numerador == NULL || denominador == NULL || *denominador == 0)
+        return 0;
+
+    a = *numerador;
+    b = *denominador;
+    if (a < 0) a = -a;
+    if (b < 0) b = -b;
+
+    while (b != 0) {
+        resto = a % b;
+        a = b;
+        b = resto;
     }
+
+    if (a == 0)
+        return 0;
+    *numerador /= a;
+    *denominador /= a;
+    return 1;
 }
 ```
 
 ### 4. Explicação linha a linha
 
-**Linha 1 — `void simplifica(int *divisor, int *dividendo)`**
+**Linha 1 — `int simplifica(int *numerador, int *denominador)`**
 
-Declara uma função que não retorna um valor, mas modifica os números recebidos por meio de ponteiros.
+Declara uma função que modifica numerador e denominador por meio de ponteiros. Retorna `1` quando simplifica a fração e `0` para ponteiros inválidos ou denominador zero.
 
-Os nomes `divisor` e `dividendo` foram mantidos conforme o código original. Em uma fração convencional, os termos normalmente são chamados de denominador e numerador, respectivamente.
+Os parâmetros agora usam os nomes usuais para os termos da fração: numerador e denominador.
 
-**Linha 2 — `int c, menor;`**
+**Linhas 2 a 4 — validação dos argumentos**
 
-Declara duas variáveis:
+A função verifica se os ponteiros existem e se o denominador é diferente de zero. Se algum desses requisitos falhar, retorna `0` sem tentar dividir.
 
-- `c`: representa o divisor que será testado.
-- `menor`: armazena o menor dos dois valores recebidos.
+**Linhas 6 a 9 — preparação dos valores**
 
-**Linhas 3 a 6 — escolha do menor valor**
+Os termos são copiados para variáveis `long long` temporárias. Isso permite obter o valor absoluto mesmo quando o termo de entrada é o menor inteiro representável.
 
-A condição compara os valores apontados por `divisor` e `dividendo`. Se o primeiro for menor, ele é armazenado em `menor`. Caso contrário, o segundo é utilizado.
+**Linhas 11 a 15 — algoritmo de Euclides**
 
-A ideia é limitar a busca aos números que poderiam dividir ambos os valores.
+O laço usa o resto da divisão para encontrar o máximo divisor comum. A cada repetição, o segundo valor passa a ser o resto; quando o resto chega a zero, o outro valor é o divisor comum.
 
-**Linha 8 — `for (c = 1; c <= menor; c++)`**
+**Linhas 17 a 21 — simplificação**
 
-Como no [exercício 1](#exercício-1--ordenar-quatro-valores), o `for` inicializa um contador, verifica uma condição e incrementa o contador ao final de cada repetição.
-
-Aqui, o contador começa em `1` e percorre os valores até `menor`, inclusive. Cada número testado é um possível divisor comum.
-
-**Linha 9 — `if (*divisor % c == 0 && *dividendo % c == 0)`**
-
-Verifica se os dois valores são divisíveis por `c`.
-
-- `% c == 0` significa que a divisão por `c` não deixa resto.
-- `&&` significa "e": as duas condições precisam ser verdadeiras.
-
-Se apenas um dos valores for divisível por `c`, o bloco não será executado.
-
-**Linha 10 — `*divisor = *divisor / c;`**
-
-Divide o primeiro valor por `c` e armazena o resultado na própria variável original.
-
-**Linha 11 — `*dividendo = *dividendo / c;`**
-
-Faz o mesmo com o segundo valor. Como a função recebe ponteiros, as alterações são refletidas nas variáveis do programa principal.
+A função divide numerador e denominador pelo divisor comum, altera as variáveis originais por meio dos ponteiros e retorna `1` para indicar sucesso.
 
 ### 5. 🧃 Analogia cotidiana: dividir duas coleções em grupos iguais
 
@@ -455,10 +385,8 @@ A simplificação de uma fração segue um raciocínio parecido: os dois valores
 
 ### 6. Atenção
 
-> [!WARNING]
-> - **Os valores são alterados durante a busca:** o programa modifica os dois números dentro do laço. Isso significa que os próximos testes não são realizados necessariamente com os valores originais. Como consequência, alguns casos podem terminar sem a simplificação correta.
-> - **Busca pelo divisor comum:** o objetivo é dividir os dois valores pelo maior divisor comum. A implementação atual não calcula esse divisor separadamente. Uma futura correção poderá utilizar o **algoritmo de Euclides** para encontrar o máximo divisor comum antes de realizar as divisões.
-> - **Entradas esperadas:** o programa pressupõe valores positivos e diferentes de zero. Entradas negativas ou zero podem produzir resultados incorretos ou situações não previstas pela lógica atual.
+> [!TIP]
+> O algoritmo de Euclides agora calcula primeiro o máximo divisor comum e só então altera os termos, evitando que a busca mude os valores usados nos cálculos. O programa aceita numeradores negativos e rejeita denominador zero. Quem chama `simplifica` deve garantir ponteiros válidos.
 
 ---
 
@@ -491,33 +419,33 @@ O produto é conhecido como $100!$, ou **fatorial de 100**. É um número extrem
 - Fórmula da soma de uma sequência.
 - Laço `for`.
 - Multiplicação acumulada.
-- Tipos `int` e `double`.
+- Tipos `int` e `long double`.
 
-O tipo `int` é usado para números inteiros. Já `double` representa números de ponto flutuante, permitindo valores muito maiores em magnitude, embora com precisão limitada.
+O tipo `int` é usado para a soma inteira. `long double` representa o produto em ponto flutuante, com grande faixa de magnitude e precisão finita.
 
-### 3. Código original
+### 3. Código atualizado
 
 ```c
-double somaproduto(int *soma, double *produto) {
+void somaproduto(int *soma, long double *produto) {
     int c;
-    double p = 1;
+    long double p = 1.0L;
 
     *soma = 101 * 100 / 2;
     for (c = 100; c > 0; c--)
-        p = p * c;
+        p *= c;
     *produto = p;
 }
 ```
 
 ### 4. Explicação linha a linha
 
-**Linha 1 — `double somaproduto(int *soma, double *produto)`**
+**Linha 1 — `void somaproduto(int *soma, long double *produto)`**
 
 Declara a função `somaproduto`.
 
-- `double` é o tipo de retorno declarado.
+- `void` indica que os resultados são entregues pelos parâmetros.
 - `int *soma` recebe um ponteiro para inteiro.
-- `double *produto` recebe um ponteiro para `double`.
+- `long double *produto` recebe um ponteiro para o produto.
 
 A função utiliza os ponteiros para disponibilizar os resultados nas variáveis recebidas.
 
@@ -525,7 +453,7 @@ A função utiliza os ponteiros para disponibilizar os resultados nas variáveis
 
 Declara o contador utilizado para percorrer os números de 100 até 1.
 
-**Linha 3 — `double p = 1;`**
+**Linha 3 — `long double p = 1.0L;`**
 
 Cria o acumulador `p`, inicializado com `1`. Esse valor inicial é importante porque multiplicar qualquer número por zero resultaria em zero, destruindo o resultado do produto.
 
@@ -567,13 +495,8 @@ Para o produto, porém, você precisa multiplicar cada fator. O acumulador `p` f
 
 ### 6. Atenção
 
-> [!WARNING]
-> - **Incompatibilidade entre ponteiros e variáveis:** a função recebe `int *soma`, mas o programa principal declara `soma` como `double`. Passar um ponteiro para `double` onde se espera um ponteiro para `int` é incompatível. Isso pode gerar avisos de compilação e, se executado, comportamento indefinido ao acessar a memória com o tipo errado.
-> - **Especificador de impressão incorreto:** o programa principal utiliza `%d` para imprimir uma variável `double`. Como `%d` espera um inteiro, essa incompatibilidade pode produzir resultados sem sentido ou comportamento indefinido.
-> - **Tipo de retorno:** a função foi declarada como `double`, mas não retorna um valor. O resultado calculado é comunicado por meio dos ponteiros, então um tipo de retorno `void` seria mais apropriado.
-> - **Limitações do `double`:** embora possa representar números de magnitude muito elevada, `double` não armazena todos os inteiros com precisão ilimitada. O fatorial de 100 pode ser representado em magnitude, mas não com todos os seus dígitos exatos.
->
-> Esses pontos serão corrigidos na implementação futura, mantendo o objetivo original do exercício.
+> [!TIP]
+> Os tipos agora correspondem entre a função e o programa principal: a soma é `int`, o produto é `long double`, o retorno da função é `void` e o produto é exibido com `%Le`. O produto de 1 a 100 é aproximado em ponto flutuante: sua magnitude pode ser representada, mas não todos os seus dígitos com exatidão.
 
 ---
 
@@ -605,25 +528,33 @@ Em C, a primeira posição de um vetor é a posição **0**, não a posição 1.
 - Entrada de dados com `scanf`.
 - Endereços de memória.
 
-### 3. Código original
+### 3. Código atualizado
 
 ```c
-void vetVal(int *v, int N) {
+int vetVal(int *v, int N) {
     int c;
+    if (v == NULL || N <= 0) {
+        fprintf(stderr, "Vetor ou tamanho invalido.\n");
+        return 0;
+    }
     for (c = 0; c < N; c++) {
         printf("Digite o %d valor: ", c + 1);
-        scanf("%d", &v[c]);
+        if (scanf("%d", &v[c]) != 1) {
+            fprintf(stderr, "Entrada invalida.\n");
+            return 0;
+        }
     }
+    return 1;
 }
 ```
 
 ### 4. Explicação linha a linha
 
-**Linha 1 — `void vetVal(int *v, int N)`**
+**Linha 1 — `int vetVal(int *v, int N)`**
 
 Declara a função `vetVal`.
 
-- `void` indica que a função não retorna um valor.
+- `int` indica que a função informa, por meio de `1` ou `0`, se conseguiu preencher o vetor.
 - `int *v` recebe o endereço do primeiro elemento do vetor.
 - `int N` informa quantos elementos devem ser preenchidos.
 
@@ -657,9 +588,8 @@ O vetor é a prateleira, os índices são os números das caixas e os valores di
 
 ### 6. Atenção
 
-> [!WARNING]
-> - **Tamanho do vetor:** a função pressupõe que o vetor recebido tenha pelo menos `N` posições. Se `N` for maior do que a capacidade real do vetor, o programa poderá acessar memória fora dos limites, causando comportamento indefinido.
-> - **Entrada inválida:** o código não verifica o retorno de `scanf`. Se o usuário digitar algo que não seja um inteiro válido, a leitura poderá falhar e deixar posições sem o valor esperado. Uma futura correção poderá validar cada entrada.
+> [!TIP]
+> A função agora rejeita ponteiro nulo e tamanho não positivo, verifica cada leitura e informa ao programa principal se conseguiu preencher o vetor. Em C, o ponteiro não carrega a capacidade do vetor: quem chama a função ainda precisa garantir que `N` não exceda o número de posições alocadas. Neste programa, o vetor tem cinco posições e a chamada usa `N = 5`.
 
 ---
 
@@ -673,11 +603,15 @@ Criar uma função que receba um vetor e exiba todos os seus valores na tela.
 
 É como ler em voz alta os itens de uma lista, começando pelo primeiro e seguindo até o último.
 
-### 2. Código original
+### 2. Código atualizado
 
 ```c
 void mostra(int *v, int N) {
     int c;
+    if (v == NULL || N < 0) {
+        fprintf(stderr, "Vetor ou tamanho invalido.\n");
+        return;
+    }
     printf("[");
     for (c = 0; c < N; c++)
         printf(" %d ", v[c]);
@@ -719,9 +653,8 @@ A função `mostra` faz a mesma coisa com números armazenados em um vetor: perc
 
 ### 5. Atenção
 
-> [!WARNING]
-> - **Capacidade do vetor:** a função deve receber um tamanho que corresponda à quantidade de elementos disponíveis. Um tamanho maior do que a capacidade real poderá provocar acesso indevido à memória.
-> - **Formatação:** os espaços antes e depois de `%d` ajudam a separar os valores na saída, mas não representam parte dos números armazenados.
+> [!NOTE]
+> A chamada do programa usa um vetor de cinco posições e informa `N = 5`. Em C, a função não consegue descobrir a capacidade real a partir de um ponteiro; quem a chama deve passar um tamanho que corresponda ao vetor. Os espaços em torno de `%d` são apenas separadores visuais da saída.
 
 ---
 
@@ -745,11 +678,15 @@ A função deverá exibir:
 [50, 40, 30, 20, 10]
 ```
 
-### 2. Código original
+### 2. Código atualizado
 
 ```c
 void mostrainverso(int *v, int N) {
     int c;
+    if (v == NULL || N < 0) {
+        fprintf(stderr, "Vetor ou tamanho invalido.\n");
+        return;
+    }
     printf("[");
     for (c = N - 1; c >= 0; c--)
         printf(" %d ", v[c]);
@@ -793,9 +730,8 @@ A função faz isso com o vetor. Ela muda a **ordem de exibição**, mas não al
 
 ### 5. Atenção
 
-> [!WARNING]
-> - **Vetor vazio:** se `N` for zero, o contador começa em `-1` e a condição `c >= 0` é falsa. O laço não executará nenhuma repetição, e apenas os colchetes serão impressos. Esse comportamento é válido para uma exibição vazia.
-> - **Tamanho inválido:** se o tamanho recebido não corresponder à capacidade real do vetor, o acesso aos elementos poderá resultar em comportamento indefinido.
+> [!NOTE]
+> Um tamanho zero exibe corretamente um vetor vazio (`[]`); tamanho negativo e ponteiro nulo são rejeitados. Em C, a função não consegue descobrir a capacidade real a partir de um ponteiro, então quem chama deve garantir que `N` corresponda ao vetor. O programa principal passa um vetor de cinco posições junto com `N = 5`.
 
 ---
 
@@ -817,31 +753,33 @@ $$
 5 + 10 + 15 + 20 + 25 = 75
 $$
 
-O objetivo oficial pede uma função que **retorne** a soma ao programa principal. O código existente, entretanto, calcula e **imprime** o resultado dentro da própria função.
+O objetivo oficial pede uma função que **retorne** a soma ao programa principal. A função corrigida calcula e retorna o resultado; o programa principal é responsável por exibi-lo.
 
-### 2. Código original
+### 2. Código atualizado
 
 ```c
-void soma(int *v, int N) {
-    int c, soma = 0;
+int soma(int *v, int N) {
+    int c, total = 0;
+    if (v == NULL || N < 0)
+        return 0;
     for (c = 0; c < N; c++)
-        soma += v[c];
-    printf("Soma: %d", soma);
+        total += v[c];
+    return total;
 }
 ```
 
 ### 3. Explicação linha a linha
 
-**Linha 1 — `void soma(int *v, int N)`**
+**Linha 1 — `int soma(int *v, int N)`**
 
-Declara uma função chamada `soma`, que recebe o vetor e sua quantidade de elementos.
+Declara uma função chamada `soma`, que recebe o vetor e sua quantidade de elementos e retorna a soma calculada.
 
-**Linha 2 — `int c, soma = 0;`**
+**Linha 2 — `int c, total = 0;`**
 
 Declara duas variáveis:
 
 - `c` controla a posição atual.
-- `soma` acumula o resultado, começando em zero.
+- `total` acumula o resultado, começando em zero.
 
 O zero é um bom valor inicial para uma soma porque não altera o resultado quando um número é adicionado a ele.
 
@@ -849,31 +787,28 @@ O zero é um bom valor inicial para uma soma porque não altera o resultado quan
 
 Como no [exercício 1](#exercício-1--ordenar-quatro-valores), o laço percorre todas as posições do vetor, da primeira à última.
 
-**Linha 4 — `soma += v[c];`**
+**Linha 4 — `total += v[c];`**
 
-Adiciona o elemento atual ao acumulador. A expressão `soma += v[c]` equivale a:
+Adiciona o elemento atual ao acumulador. A expressão `total += v[c]` equivale a:
 
 ```c
-soma = soma + v[c];
+total = total + v[c];
 ```
 
 A cada repetição, o total é atualizado.
 
-**Linha 5 — `printf("Soma: %d", soma);`**
-
-Exibe o resultado final na tela.
+O programa principal exibe o valor retornado por `soma`, permitindo também reutilizá-lo em outros cálculos.
 
 ### 4. 🧃 Analogia cotidiana: somar o valor das compras
 
 Imagine que você comprou três produtos que custam R$ 5, R$ 10 e R$ 15. Para descobrir o total, começa em zero e adiciona o preço de cada produto.
 
-O acumulador `soma` funciona como o total parcial no visor de uma calculadora. A cada item, ele recebe o valor anterior mais o novo preço.
+O acumulador `total` funciona como o total parcial no visor de uma calculadora. A cada item, ele recebe o valor anterior mais o novo preço.
 
 ### 5. Atenção
 
-> [!WARNING]
-> - **O resultado não é retornado:** o objetivo oficial exige que a função devolva a soma, mas ela foi declarada como `void` e apenas imprime o resultado. Isso impede que o programa principal utilize diretamente o valor calculado em outras operações. A implementação futura deverá retornar um `int` e utilizar `return`.
-> - **Tamanho do vetor:** a função depende de receber um tamanho válido. Um tamanho incorreto pode causar leituras fora dos limites do vetor.
+> [!NOTE]
+> A função agora retorna a soma e rejeita um ponteiro nulo ou tamanho negativo. Um tamanho zero retorna `0`. Como C não registra a capacidade junto ao ponteiro, quem chama ainda precisa informar um tamanho que não ultrapasse o vetor; o programa usa cinco posições e passa `N = 5`.
 
 ---
 
@@ -894,7 +829,7 @@ Imagine uma turma de estudantes. Primeiro, você calcula a média das notas da t
 - Laços `for`.
 - Condicionais `if`.
 - Comparação de valores.
-- Divisão inteira e números de ponto flutuante.
+- Números de ponto flutuante.
 
 A média aritmética é calculada pela soma de todos os valores dividida pela quantidade de elementos:
 
@@ -902,39 +837,43 @@ $$
 \text{média} = \frac{\text{soma dos valores}}{\text{quantidade de valores}}
 $$
 
-### 3. Código original
+### 3. Código atualizado
 
 ```c
-void mediaQtd(int *v, int N) {
-    int c, media = 0, soma = 0, qtd = 0;
+int mediaQtd(int *v, int N, double *media) {
+    int c, quantidade = 0;
+    long long soma = 0;
+
+    if (v == NULL || media == NULL || N <= 0)
+        return -1;
 
     for (c = 0; c < N; c++)
         soma += v[c];
-    media = soma / N;
+
+    *media = (double)soma / N;
 
     for (c = 0; c < N; c++)
-        if (v[c] > media)
-            qtd++;
+        if (v[c] > *media)
+            quantidade++;
 
-    printf("Média: %d\n", media);
-    printf("%d valores sao maiores que a media de todos", qtd);
+    return quantidade;
 }
 ```
 
 ### 4. Explicação linha a linha
 
-**Linha 1 — `void mediaQtd(int *v, int N)`**
+**Linha 1 — `int mediaQtd(int *v, int N, double *media)`**
 
-Declara a função `mediaQtd`, que recebe um vetor e seu tamanho.
+Declara a função `mediaQtd`, que recebe um vetor, seu tamanho e o endereço onde será armazenada a média. Retorna a quantidade de elementos acima da média, ou `-1` se os argumentos ou o tamanho forem inválidos.
 
-**Linha 2 — `int c, media = 0, soma = 0, qtd = 0;`**
+**Linha 2 — `int c, quantidade = 0; long long soma = 0;`**
 
 Declara as variáveis necessárias:
 
 - `c`: contador dos laços.
-- `media`: armazena a média calculada.
-- `soma`: acumula os valores do vetor.
-- `qtd`: conta quantos elementos são maiores que a média.
+- `media`: é o parâmetro de saída para a média.
+- `soma`: acumula os valores em um tipo capaz de guardar uma soma maior.
+- `quantidade`: conta quantos elementos são maiores que a média.
 
 Os acumuladores começam em zero.
 
@@ -942,19 +881,17 @@ Os acumuladores começam em zero.
 
 Como no [exercício 1](#exercício-1--ordenar-quatro-valores), o `for` percorre todas as posições do vetor. O bloco `soma += v[c]` adiciona cada elemento ao acumulador. Ao terminar o laço, `soma` contém o total de todos os valores.
 
-**Linha 6 — `media = soma / N;`**
+**Linha 6 — `*media = (double)soma / N;`**
 
-Divide a soma pela quantidade de elementos para calcular a média. Como `soma`, `N` e `media` são inteiros, a **divisão inteira** descarta a parte decimal do resultado.
+Divide a soma pela quantidade de elementos para calcular a média. A conversão para `double` preserva a parte decimal.
 
-**Linhas 8 a 10 — segundo laço**
+**Linhas 15 a 17 — segundo laço**
 
-O segundo laço percorre novamente o vetor. A condição `v[c] > media` verifica se o elemento atual é maior do que a média calculada. Quando a condição é verdadeira, `qtd++` aumenta a contagem em uma unidade.
+O segundo laço percorre novamente o vetor. A condição `v[c] > *media` verifica se o elemento atual é maior do que a média calculada. Quando a condição é verdadeira, `quantidade++` aumenta a contagem em uma unidade.
 
 Esse segundo percurso é necessário porque o programa precisa conhecer a média **antes** de poder identificar quais valores estão acima dela.
 
-**Linhas 12 e 13 — exibição**
-
-A primeira instrução apresenta a média; a segunda mostra a quantidade de elementos que ficaram acima dela. O `\n` na primeira mensagem representa uma quebra de linha.
+O programa principal apresenta a média com duas casas decimais e exibe a quantidade devolvida pela função.
 
 ### 5. 🧃 Analogia cotidiana: notas de uma turma
 
@@ -970,10 +907,8 @@ Observe que uma nota igual à média não entra na contagem, pois a condição �
 
 ### 6. Atenção
 
-> [!WARNING]
-> - **Perda da parte decimal:** a média é armazenada em `int`. Se a média real for, por exemplo, 6,8, o programa armazenará 6. Isso pode fazer com que valores maiores que 6, mas menores que 6,8, sejam contados incorretamente como acima da média. Uma futura correção utilizará `double` para representar a média.
-> - **Vetor vazio:** se `N` for zero, a instrução `media = soma / N` realiza uma divisão por zero. Isso pode causar comportamento indefinido. A função deverá validar o tamanho antes de calcular a média.
-> - **Tamanho do vetor:** como nos exercícios anteriores, o tamanho informado precisa corresponder à capacidade disponível.
+> [!TIP]
+> A média agora usa `double`, a soma intermediária usa `long long` e a função rejeita vetor nulo, endereço de média nulo ou tamanho não positivo antes de dividir. Como C não armazena a capacidade junto ao ponteiro, o chamador ainda precisa garantir que `N` corresponda ao vetor; neste programa, são cinco posições.
 
 ---
 
@@ -998,73 +933,43 @@ A soma será:
 
 O primeiro elemento de A é somado ao primeiro elemento de B, o segundo ao segundo e assim por diante.
 
-### 2. Código original
+### 2. Código atualizado
 
 ```c
-void somaVetor(int *v1, int N, int *v2) {
-    int c, v[N], valor1, valor2;
-
-    for (c = 0; c < N; c++) {
-        valor1 = v1[c];
-        valor2 = v2[c];
-        v[c] = valor1 + valor2;
-    }
-
-    printf("Soma\n[");
+int somaVetor(const int *v1, const int *v2, int *resultado, int N) {
+    int c;
+    if (v1 == NULL || v2 == NULL || resultado == NULL || N <= 0)
+        return 0;
     for (c = 0; c < N; c++)
-        printf(" %d ", v[c]);
-    printf("]");
+        resultado[c] = v1[c] + v2[c];
+    return 1;
 }
 ```
 
 ### 3. Explicação linha a linha
 
-**Linha 1 — `void somaVetor(int *v1, int N, int *v2)`**
+**Linha 1 — `int somaVetor(const int *v1, const int *v2, int *resultado, int N)`**
 
-Declara a função que recebe dois vetores e a quantidade de elementos que será processada.
+Declara a função que recebe os dois vetores, o vetor de saída e a quantidade de elementos que será processada. Retorna `0` para argumentos ou tamanho inválidos e `1` quando conclui a soma.
 
 - `v1` aponta para o primeiro vetor.
-- `N` representa a quantidade de posições.
 - `v2` aponta para o segundo vetor.
+- `resultado` aponta para as posições onde serão guardadas as somas.
+- `N` representa a quantidade de posições.
 
-**Linha 2 — `int c, v[N], valor1, valor2;`**
+**Linha 2 — `int c;`**
 
-Declara:
-
-- `c`: contador dos laços.
-- `v[N]`: vetor local que armazenará os resultados.
-- `valor1`: recebe temporariamente um elemento de `v1`.
-- `valor2`: recebe temporariamente um elemento de `v2`.
-
-O tamanho `N` é utilizado para criar o vetor de resultados.
+Declara o contador. O vetor de resultados é criado no programa principal com capacidade conhecida; assim, a função não depende de um vetor de tamanho variável (VLA).
 
 **Linha 4 — `for (c = 0; c < N; c++)`**
 
 Como no [exercício 1](#exercício-1--ordenar-quatro-valores), o laço percorre todas as posições, da primeira à última.
 
-**Linha 5 — `valor1 = v1[c];`**
+**Linha 5 — `resultado[c] = v1[c] + v2[c];`**
 
-Copia o elemento atual do primeiro vetor para `valor1`.
+Soma os valores da posição atual dos dois vetores e grava o resultado na posição correspondente do vetor de saída.
 
-**Linha 6 — `valor2 = v2[c];`**
-
-Copia o elemento da mesma posição do segundo vetor para `valor2`.
-
-**Linha 7 — `v[c] = valor1 + valor2;`**
-
-Soma os dois valores temporários e armazena o resultado na posição correspondente do vetor de saída.
-
-**Linha 10 — `printf("Soma\n[");`**
-
-Imprime o título `Soma` e, em seguida, uma quebra de linha e o colchete de abertura.
-
-**Linhas 11 e 12 — segundo laço**
-
-Como no [exercício 1](#exercício-1--ordenar-quatro-valores), o `for` percorre o vetor. Neste caso, o bloco imprime os valores calculados anteriormente, em vez de realizar novas somas.
-
-**Linha 13 — `printf("]");`**
-
-Imprime o colchete de fechamento.
+O programa principal imprime o vetor de resultados depois que a função calcula as somas. A função se concentra no cálculo e não cria nem imprime um vetor local.
 
 ### 4. 🧃 Analogia cotidiana: juntar quantidades de dois carrinhos
 
@@ -1072,14 +977,12 @@ Imagine dois carrinhos de supermercado. Em ambos existem quantidades de determin
 
 Para saber a quantidade total de cada produto, você soma a quantidade do primeiro carrinho à quantidade do segundo. Faz isso para cada posição da lista e anota os resultados em uma terceira lista.
 
-Os dois vetores de entrada são os carrinhos originais; o vetor `v` é a lista com as quantidades totais.
+Os dois vetores de entrada são os carrinhos originais; o vetor `resultado` é a lista com as quantidades totais.
 
 ### 5. Atenção
 
-> [!WARNING]
-> - **Tamanhos incompatíveis:** a função pressupõe que os dois vetores tenham pelo menos `N` elementos. Se um deles for menor, o acesso às posições inexistentes poderá provocar comportamento indefinido.
-> - **Vetor de tamanho variável:** `int v[N]` declara um *vetor de tamanho variável* (VLA), recurso disponível em determinadas versões e implementações de C, mas não aceito por todos os compiladores e padrões da linguagem. Uma futura correção poderá adaptar a declaração conforme o ambiente de compilação.
-> - **Tamanho inválido:** criar um vetor com tamanho zero ou negativo não é uma utilização válida desse recurso. A função deverá validar `N` antes de criar ou acessar o vetor.
+> [!TIP]
+> A função não cria mais um VLA: o vetor de resultados tem tamanho fixo no programa principal e é passado como parâmetro. A função também rejeita ponteiros nulos e tamanhos não positivos. Como C não consegue determinar a capacidade real de um ponteiro, o chamador deve garantir que os dois vetores de entrada e o vetor de saída tenham pelo menos `N` posições; neste programa, os três têm cinco.
 
 ---
 

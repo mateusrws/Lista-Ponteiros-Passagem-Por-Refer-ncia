@@ -1,45 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void somaVetor(int *v1, int N, int *v2);
+int somaVetor(const int *v1, const int *v2, int *resultado, int N);
 
-int main()
+int main(void)
 {
-
     int c, v1[5], v2[5];
+    int resultado[5];
 
-    // OS DOIS VETORES TEM QUE TER A MESMA QUANTIDADE DE VALORES
-
-    for(c=0;c<5;c++){
-        printf("Digite o %d valor: ", c+1);
-        scanf("%d", &v1[c]);
+    for (c = 0; c < 5; c++) {
+        printf("Digite o %d valor do primeiro vetor: ", c + 1);
+        if (scanf("%d", &v1[c]) != 1) {
+            fprintf(stderr, "Entrada invalida.\n");
+            return 1;
+        }
     }
 
     printf("\nAGORA OUTRO VETOR\n\n");
 
-    for(c=0;c<5;c++){
-        printf("Digite o %d valor: ", c+1);
-        scanf("%d", &v2[c]);
+    for (c = 0; c < 5; c++) {
+        printf("Digite o %d valor do segundo vetor: ", c + 1);
+        if (scanf("%d", &v2[c]) != 1) {
+            fprintf(stderr, "Entrada invalida.\n");
+            return 1;
+        }
     }
 
-    somaVetor(v1,5,v2);
+    if (!somaVetor(v1, v2, resultado, 5)) {
+        fprintf(stderr, "Vetores ou tamanho invalidos.\n");
+        return 1;
+    }
+
+    printf("Soma\n[");
+    for (c = 0; c < 5; c++)
+        printf(" %d ", resultado[c]);
+    printf("]\n");
 
     return 0;
 }
 
-void somaVetor(int *v1, int N, int *v2){
-    int c, v[N], valor1, valor2;
+int somaVetor(const int *v1, const int *v2, int *resultado, int N)
+{
+    int c;
 
-    for(c=0;c<N;c++){
-        valor1 = v1[c];
-        valor2 = v2[c];
-        v[c] = valor1 + valor2;
-    }
+    if (v1 == NULL || v2 == NULL || resultado == NULL || N <= 0)
+        return 0;
 
-    printf("Soma\n");
-    printf("[");
-    for(c=0;c<N;c++){
-        printf(" %d ", v[c]);
-    }
-    printf("]");
+    for (c = 0; c < N; c++)
+        resultado[c] = v1[c] + v2[c];
+
+    return 1;
 }
